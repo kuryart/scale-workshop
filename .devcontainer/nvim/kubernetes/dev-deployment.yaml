@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.service: dev
+  name: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: dev
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.32.0 (HEAD)
+      labels:
+        io.kompose.network/node-js_dev: "true"
+        io.kompose.service: dev
+    spec:
+      containers:
+        - args:
+            - zsh
+            - -c
+            - echo Container started; tail -f /dev/null
+          command:
+            - /usr/local/bin/entrypoint.sh
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_PASSWORD
+                  name: env
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_USER
+                  name: env
+            - name: GITHUB_EMAIL
+              valueFrom:
+                configMapKeyRef:
+                  key: GITHUB_EMAIL
+                  name: env
+            - name: GIT_USER_EMAIL
+              valueFrom:
+                configMapKeyRef:
+                  key: GIT_USER_EMAIL
+                  name: env
+            - name: GIT_USER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: GIT_USER_NAME
+                  name: env
+            - name: PROJECT_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: PROJECT_NAME
+                  name: env
+            - name: SSH_KEY_PATH
+              value: /home/dev/.ssh/github
+            - name: SSH_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: SSH_PASSWORD
+                  name: env
+            - name: UID
+              valueFrom:
+                configMapKeyRef:
+                  key: UID
+                  name: env
+            - name: USER
+              valueFrom:
+                configMapKeyRef:
+                  key: USER
+                  name: env
+            - name: USER_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: USER_PASSWORD
+                  name: env
+          image: node-js_dev
+          name: node-js_dev
+          tty: true
+          volumeMounts:
+            - mountPath: /var/www/node-js_dev
+              name: dev-claim0
+            - mountPath: /home/dev/.zshrc
+              name: dev-claim1
+            - mountPath: /home/dev/.p10k.zsh
+              name: dev-claim2
+            - mountPath: /home/dev/.config/starship.toml
+              name: dev-claim3
+          workingDir: /var/www/node-js_dev
+      restartPolicy: Always
+      volumes:
+        - name: dev-claim0
+          persistentVolumeClaim:
+            claimName: dev-claim0
+        - name: dev-claim1
+          persistentVolumeClaim:
+            claimName: dev-claim1
+        - name: dev-claim2
+          persistentVolumeClaim:
+            claimName: dev-claim2
+        - name: dev-claim3
+          persistentVolumeClaim:
+            claimName: dev-claim3

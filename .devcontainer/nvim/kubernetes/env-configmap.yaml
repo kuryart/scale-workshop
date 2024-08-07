@@ -1,0 +1,17 @@
+apiVersion: v1
+data:
+  DB_PASSWORD: "12345678"
+  DB_USER: dev
+  GIT_USER_EMAIL: kuryart1@gmail.com
+  GIT_USER_NAME: kuryart
+  GITHUB_EMAIL: kuryart1@gmail.com
+  PROJECT_NAME: node-js
+  SSH_PASSWORD: Br0X4d4$#
+  UID: "1000"
+  USER: dev
+  USER_PASSWORD: "12345678"
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: dev-env
+  name: env

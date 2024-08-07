@@ -1,0 +1,27 @@
+new_tab nvim
+layout grid
+cd $(pwd)/../../..
+title nvim
+launch --env KITTY_WINDOW_ID=1 zsh 
+focus
+
+new_tab nvim-dev
+layout grid
+cd $(pwd)/../
+title nvim-dev
+launch --env KITTY_WINDOW_ID=2 zsh -c "docker-compose exec -it scale-workshop_dev zsh" 
+focus
+
+new_tab mc
+layout fat
+cd $(pwd)/../../..
+title mc
+launch --env KITTY_WINDOW_ID=3 mc
+focus
+
+new_tab mc-dev
+layout fat
+cd $(pwd)/../
+title mc-dev
+launch --env KITTY_WINDOW_ID=4 zsh -c "docker-compose exec -it scale-workshop_dev mc" 
+focus
