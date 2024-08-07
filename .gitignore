@@ -31,3 +31,6 @@ coverage
 # Production secrets
 .env.production
 .env.staging
+
+# ,env
+.env
