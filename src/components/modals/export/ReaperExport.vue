@@ -14,6 +14,7 @@ const props = defineProps<{
   relativeIntervals: Interval[]
   scale: Scale
   labels: string[]
+  colors: string[]
 }>()
 
 const store = useExportStore()
@@ -41,7 +42,8 @@ function doExport() {
     baseDegree: store.baseDegree,
     centsRoot: store.centsRoot,
     integratePeriod: store.integratePeriod,
-    displayPeriod: store.displayPeriod
+    displayPeriod: store.displayPeriod,
+    colors: props.colors
   }
 
   const exporter = new ReaperExporter(params)

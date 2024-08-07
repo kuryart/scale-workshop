@@ -16,6 +16,8 @@ export default class ReaperExporter extends BaseExporter {
     const baseDegree = this.params.baseDegree || 0
     const modBySize = !this.params.integratePeriod
 
+    const colors = this.params.colors
+
     const intervals = this.params.relativeIntervals
     if (!intervals.length) {
       throw new Error('Cannot export empty scale.')
@@ -25,7 +27,7 @@ export default class ReaperExporter extends BaseExporter {
     let file = '# MIDI note / CC name map' + this.params.newline
 
     for (let i = ReaperExporter.tuningMaxSize - 1; i >= 0; i--) {
-      file += i.toString() + ' '
+      file += i.toString().padStart(4, ' ') + ' '
 
       let index = i - scale.baseMidiNote
       const period = basePeriod + Math.floor(index / scale.size)
@@ -33,9 +35,19 @@ export default class ReaperExporter extends BaseExporter {
         index = mmod(index, scale.size)
       }
 
+      if (colors[index] === 'white') {
+        file += '██████' + ' '
+      } else if (colors[index] === 'black') {
+        file += '______' + ' '
+      } else {
+        file += '' + ' '
+      }
+
       if (format === 'label' && index > 0 && index <= labels.length) {
+        console.log("teste1")
         file += labels[index - 1]
       } else if (format === 'degree') {
+        console.log("teste2")
         file += `${index + baseDegree}/${scale.size}`
       } else {
         const frequency = scale.getFrequency(i)
@@ -43,12 +55,15 @@ export default class ReaperExporter extends BaseExporter {
 
         switch (format) {
           case 'cents':
+            console.log("teste3")
             file += valueToCents(ratio).toFixed(digits)
             break
           case 'decimal':
+            console.log("teste4")
             file += ratio.toFixed(digits)
             break
           case 'frequency':
+            console.log("teste5")
             file += frequency.toFixed(digits)
             break
         }
@@ -60,11 +75,14 @@ export default class ReaperExporter extends BaseExporter {
           const value = interval.value.mul(equave.pow(numEquaves))
           if (value instanceof TimeReal) {
             if (interval.domain === 'linear') {
+              console.log("teste6")
               file += value.valueOf().toFixed(digits).replace('.', ',')
             } else {
+              console.log("teste7")
               file += value.totalCents(true).toFixed(digits)
             }
           } else {
+            console.log("teste8")
             file += new Interval(
               value,
               interval.domain,
@@ -77,8 +95,10 @@ export default class ReaperExporter extends BaseExporter {
       }
 
       if (this.params.displayPeriod) {
+        console.log("Period: " + ` (${period})`)
         file += ` (${period})`
       }
+      console.log("Newline: " + this.params.newline)
       file += this.params.newline
     }
 

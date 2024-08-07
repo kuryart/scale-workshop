@@ -187,6 +187,7 @@ function doExport(exporter: ExporterKey) {
       :midiOctaveOffset="-1"
       :scale="scale.scale"
       :labels="scale.labels"
+      :colors="scale.colors"
     />
   </Teleport>
   <h2>Export current settings</h2>
